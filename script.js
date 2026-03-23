@@ -38,6 +38,13 @@ const ALGO_INFO = {
         average: "O(n²)",
         worst: "O(n²)",
         space: "O(1)"
+    },
+    merge: {
+        title: "Merge Sort",
+        best: "O(n log n)",
+        average: "O(n log n)",
+        worst: "O(n log n)",
+        space: "O(n)"
     }
 };
 
@@ -149,6 +156,8 @@ async function startSorting() {
             await window.selectionSort(bars, array, sleep, abortController.signal);
         } else if (algoName === 'insertion' && window.insertionSort) {
             await window.insertionSort(bars, array, sleep, abortController.signal);
+        } else if (algoName === 'merge' && window.mergeSort) {
+            await window.mergeSort(bars, array, sleep, abortController.signal);
         }
         
         // Final sorted visual flourish
