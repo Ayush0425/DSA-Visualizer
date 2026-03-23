@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithm Visualizer</title>
+    <meta name="description" content="Visualizer for various sorting algorithms">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Sorting Visualizer</h1>
+        <div class="controls">
+            <button id="generate-btn">Generate New Array</button>
+            <div class="slider-group">
+                <label for="size-slider">Array Size: <span id="size-value">50</span></label>
+                <input type="range" id="size-slider" min="10" max="100" value="50">
+            </div>
+            <div class="slider-group">
+                <label for="speed-slider">Speed:</label>
+                <select id="speed-slider">
+                    <option value="1">1x</option>
+                    <option value="2">2x</option>
+                    <option value="5">5x</option>
+                </select>
+            </div>
+            <div class="algorithm-group">
+                <label for="algorithm-select">Algorithm:</label>
+                <select id="algorithm-select">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                </select>
+            </div>
+            <button id="start-btn" class="primary-btn">Start Sorting</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="visualization-container"></div>
+        <aside id="info-panel">
+            <h2 id="algo-title">Bubble Sort</h2>
+            <div class="complexity">
+                <h3>Time Complexity</h3>
+                <p>Best: <span id="best-time">O(n)</span></p>
+                <p>Average: <span id="average-time">O(n²)</span></p>
+                <p>Worst: <span id="worst-time">O(n²)</span></p>
+            </div>
+            <div class="complexity">
+                <h3>Space Complexity</h3>
+                <p>Worst: <span id="worst-space">O(1)</span></p>
+            </div>
+        </aside>
+    </main>
+
+    <script src="algorithms/bubbleSort.js"></script>
+    <script src="algorithms/selectionSort.js"></script>
+    <script src="algorithms/insertionSort.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
