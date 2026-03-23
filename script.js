@@ -5,6 +5,8 @@ const sizeSlider = document.getElementById('size-slider');
 const sizeValue = document.getElementById('size-value');
 const speedSelect = document.getElementById('speed-slider');
 const algorithmSelect = document.getElementById('algorithm-select');
+const customArrayInput = document.getElementById('custom-array-input');
+const setCustomBtn = document.getElementById('set-custom-btn');
 
 // Info Panel elements
 const infoPanel = {
@@ -52,15 +54,32 @@ function updateAlgorithmInfo() {
     infoPanel.space.textContent = algo.space;
 }
 
-function generateArray() {
+function generateArray(customValues = null) {
     if (isSorting) return;
     array = [];
     visualizationContainer.innerHTML = '';
-    const size = parseInt(sizeSlider.value);
+    
+    let size;
+    if (customValues) {
+        size = customValues.length;
+    } else {
+        size = parseInt(sizeSlider.value);
+    }
+    
+    // Auto-scale up to 100% max if values are large
+    let maxValue = customValues ? Math.max(...customValues, 100) : 100;
     
     for (let i = 0; i < size; i++) {
-        // Generate values between 5 and 100
-        const value = Math.floor(Math.random() * 96) + 5;
+        let value;
+        if (customValues) {
+            let rawValue = customValues[i];
+            // Scale and constrain height between 5% and 100%
+            let scaledValue = (rawValue / maxValue) * 100;
+            value = Math.floor(Math.max(5, Math.min(100, scaledValue)));
+        } else {
+            // Generate values between 5 and 100
+            value = Math.floor(Math.random() * 96) + 5;
+        }
         array.push(value);
         
         const bar = document.createElement('div');
@@ -83,6 +102,8 @@ function setUIState(sorting) {
     generateBtn.disabled = sorting;
     startBtn.disabled = sorting;
     sizeSlider.disabled = sorting;
+    customArrayInput.disabled = sorting;
+    setCustomBtn.disabled = sorting;
     // speedSelect can remain enabled so user can change speed during sorting!
     algorithmSelect.disabled = sorting;
 }
@@ -147,11 +168,29 @@ async function startSorting() {
 }
 
 // Event Listeners
+setCustomBtn.addEventListener('click', () => {
+    if (isSorting) return;
+    const inputVal = customArrayInput.value;
+    if (!inputVal.trim()) return;
+    
+    // Parse comma separated values
+    const parts = inputVal.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+    if (parts.length === 0) {
+        alert("Please enter valid comma-separated numbers.");
+        return;
+    }
+    
+    if (abortController) abortController.abort();
+    setUIState(false);
+    generateArray(parts);
+});
+
 generateBtn.addEventListener('click', () => {
     if (abortController) {
         abortController.abort();
     }
     setUIState(false);
+    customArrayInput.value = ''; // Clear custom input when generating random array
     generateArray();
 });
 

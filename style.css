@@ -60,6 +60,29 @@ h1 {
     align-items: center;
 }
 
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#custom-array-input {
+    background: rgba(15, 23, 42, 0.8);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.55rem 0.8rem;
+    border-radius: 4px;
+    font-family: inherit;
+    outline: none;
+    width: 140px;
+    font-size: 0.85rem;
+    transition: border-color 0.2s;
+}
+
+#custom-array-input:focus {
+    border-color: var(--btn-primary);
+}
+
 .slider-group, .algorithm-group {
     display: flex;
     flex-direction: column;
