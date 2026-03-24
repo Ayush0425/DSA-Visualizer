@@ -1,6 +1,7 @@
 const visualizationContainer = document.getElementById('visualization-container');
 const generateBtn = document.getElementById('generate-btn');
 const startBtn = document.getElementById('start-btn');
+const stopBtn = document.getElementById('stop-btn');
 const sizeSlider = document.getElementById('size-slider');
 const sizeValue = document.getElementById('size-value');
 const speedSelect = document.getElementById('speed-slider');
@@ -115,6 +116,7 @@ function setUIState(sorting) {
     isSorting = sorting;
     generateBtn.disabled = sorting;
     startBtn.disabled = sorting;
+    stopBtn.disabled = !sorting;
     sizeSlider.disabled = sorting;
     customArrayInput.disabled = sorting;
     setCustomBtn.disabled = sorting;
@@ -221,6 +223,11 @@ sizeSlider.addEventListener('input', (e) => {
 
 algorithmSelect.addEventListener('change', updateAlgorithmInfo);
 startBtn.addEventListener('click', startSorting);
+stopBtn.addEventListener('click', () => {
+    if (isSorting && abortController) {
+        abortController.abort();
+    }
+});
 
 // On resize, we might want to regenerate to fix bar width anomalies
 window.addEventListener('resize', () => {
