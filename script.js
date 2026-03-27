@@ -53,6 +53,13 @@ const ALGO_INFO = {
         average: "O(n log n)",
         worst: "O(n²)",
         space: "O(log n)"
+    },
+    heap: {
+        title: "Heap Sort",
+        best: "O(n log n)",
+        average: "O(n log n)",
+        worst: "O(n log n)",
+        space: "O(1)"
     }
 };
 
@@ -169,6 +176,8 @@ async function startSorting() {
             await window.mergeSort(bars, array, sleep, abortController.signal);
         } else if (algoName === 'quick' && window.quickSort) {
             await window.quickSort(bars, array, sleep, abortController.signal);
+        } else if (algoName === 'heap' && window.heapSort) {
+            await window.heapSort(bars, array, sleep, abortController.signal);
         }
         
         // Final sorted visual flourish
