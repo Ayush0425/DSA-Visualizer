@@ -1,4 +1,4 @@
-window.selectionSort = async function(bars, arr, sleep, signal) {
+window.selectionSort = async function(bars, arr, sleep, signal, trackCompare, trackSwap) {
     const n = arr.length;
     for (let i = 0; i < n - 1; i++) {
         let minIdx = i;
@@ -6,6 +6,7 @@ window.selectionSort = async function(bars, arr, sleep, signal) {
         
         for (let j = i + 1; j < n; j++) {
             bars[j].classList.add('compare');
+            if (trackCompare) trackCompare();
             await sleep(signal);
             
             if (arr[j] < arr[minIdx]) {
@@ -24,6 +25,8 @@ window.selectionSort = async function(bars, arr, sleep, signal) {
             let temp = arr[i];
             arr[i] = arr[minIdx];
             arr[minIdx] = temp;
+            
+            if (trackSwap) trackSwap();
             
             // Swap heights visually
             bars[i].style.height = `${arr[i]}%`;

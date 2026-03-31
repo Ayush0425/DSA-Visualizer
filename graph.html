@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Visualizer - Pathfinding</title>
+    <meta name="description" content="Visualizer for various pathfinding algorithms">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="graph.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-brand">DSA Visualizer</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Sorting</a>
+            <a href="graph.html" class="nav-link active">Pathfinding</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Graph Visualizer</h1>
+        <div class="controls">
+            <div class="algorithm-group">
+                <label for="algorithm-select">Algorithm:</label>
+                <select id="algorithm-select">
+                    <option value="bfs">Breadth-First Search (BFS)</option>
+                    <option value="dfs">Depth-First Search (DFS)</option>
+                    <option value="dijkstra">Dijkstra's Algorithm</option>
+                </select>
+            </div>
+            
+            <button class="primary-btn" id="start-btn">Visualize!</button>
+            <button id="clear-board-btn">Clear Board</button>
+            <button id="clear-path-btn">Clear Path</button>
+            <button id="generate-maze-btn">Generate Maze</button>
+        </div>
+    </header>
+
+    <main class="graph-main">
+        <div id="grid-container"></div>
+        <aside id="info-panel">
+            <h2 id="algo-title">Breadth-First Search</h2>
+            <div class="complexity">
+                <p class="description" id="algo-desc">BFS guarantees the shortest path on an unweighted grid.</p>
+            </div>
+            <div class="complexity legend">
+                <h3>Legend</h3>
+                <div class="legend-item"><div class="node-legend start"></div> Start Node</div>
+                <div class="legend-item"><div class="node-legend target"></div> Target Node</div>
+                <div class="legend-item"><div class="node-legend wall"></div> Wall Node</div>
+                <div class="legend-item"><div class="node-legend visited"></div> Visited Node</div>
+                <div class="legend-item"><div class="node-legend path"></div> Shortest-Path Node</div>
+            </div>
+            <div class="stats">
+                <h3>Stats</h3>
+                <p>Visited Nodes: <span id="visited-count">0</span></p>
+                <p>Path Length: <span id="path-length">0</span></p>
+            </div>
+        </aside>
+    </main>
+
+    <script src="algorithms/bfs.js"></script>
+    <script src="algorithms/dfs.js"></script>
+    <script src="algorithms/dijkstra.js"></script>
+    <script src="graph.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-window.quickSort = async function(bars, arr, sleep, signal) {
+window.quickSort = async function(bars, arr, sleep, signal, trackCompare, trackSwap) {
     async function partition(low, high) {
         let pivot = arr[high];
         bars[high].classList.add('compare'); // Highlight pivot
@@ -6,6 +6,7 @@ window.quickSort = async function(bars, arr, sleep, signal) {
         let i = low - 1;
         for (let j = low; j < high; j++) {
             bars[j].classList.add('compare');
+            if (trackCompare) trackCompare();
             await sleep(signal);
             
             if (arr[j] <= pivot) {
@@ -14,6 +15,7 @@ window.quickSort = async function(bars, arr, sleep, signal) {
                 if (i !== j) {
                     bars[i].classList.add('swap');
                     bars[j].classList.add('swap');
+                    if (trackSwap) trackSwap();
                     
                     let temp = arr[i];
                     arr[i] = arr[j];
@@ -35,6 +37,7 @@ window.quickSort = async function(bars, arr, sleep, signal) {
         if (i !== high) {
             bars[i].classList.add('swap');
             bars[high].classList.add('swap');
+            if (trackSwap) trackSwap();
             
             let temp = arr[i];
             arr[i] = arr[high];
@@ -55,7 +58,7 @@ window.quickSort = async function(bars, arr, sleep, signal) {
     }
 
     async function quickSortHelper(low, high) {
-        if (low < high) { // changed <= to < as per quicksort logic
+        if (low < high) {
             let pi = await partition(low, high);
             await quickSortHelper(low, pi - 1);
             await quickSortHelper(pi + 1, high);

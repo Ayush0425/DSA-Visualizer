@@ -1,9 +1,9 @@
-window.heapSort = async function(bars, arr, sleep, signal) {
+window.heapSort = async function(bars, arr, sleep, signal, trackCompare, trackSwap) {
     const n = arr.length;
 
     // Build max heap
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-        await heapify(bars, arr, n, i, sleep, signal);
+        await heapify(bars, arr, n, i, sleep, signal, trackCompare, trackSwap);
     }
 
     // Extract elements from heap one by one
@@ -11,6 +11,8 @@ window.heapSort = async function(bars, arr, sleep, signal) {
         // Move current root to end
         bars[0].classList.add('swap');
         bars[i].classList.add('swap');
+        
+        if (trackSwap) trackSwap();
         
         let temp = arr[0];
         arr[0] = arr[i];
@@ -27,20 +29,26 @@ window.heapSort = async function(bars, arr, sleep, signal) {
         bars[i].className = 'bar sorted';
 
         // call max heapify on the reduced heap
-        await heapify(bars, arr, i, 0, sleep, signal);
+        await heapify(bars, arr, i, 0, sleep, signal, trackCompare, trackSwap);
     }
     // Mark the last remaining element as sorted
     bars[0].className = 'bar sorted';
 };
 
-async function heapify(bars, arr, n, i, sleep, signal) {
+async function heapify(bars, arr, n, i, sleep, signal, trackCompare, trackSwap) {
     let largest = i; // Initialize largest as root
     const left = 2 * i + 1;
     const right = 2 * i + 2;
 
     bars[largest].classList.add('compare');
-    if (left < n) bars[left].classList.add('compare');
-    if (right < n) bars[right].classList.add('compare');
+    if (left < n) {
+        bars[left].classList.add('compare');
+        if (trackCompare) trackCompare();
+    }
+    if (right < n) {
+        bars[right].classList.add('compare');
+        if (trackCompare) trackCompare();
+    }
     await sleep(signal);
 
     if (left < n && arr[left] > arr[largest]) {
@@ -59,6 +67,8 @@ async function heapify(bars, arr, n, i, sleep, signal) {
         bars[i].classList.add('swap');
         bars[largest].classList.add('swap');
         
+        if (trackSwap) trackSwap();
+        
         let swap = arr[i];
         arr[i] = arr[largest];
         arr[largest] = swap;
@@ -71,6 +81,6 @@ async function heapify(bars, arr, n, i, sleep, signal) {
         bars[largest].classList.remove('swap');
         
         // Recursively heapify the affected sub-tree
-        await heapify(bars, arr, n, largest, sleep, signal);
+        await heapify(bars, arr, n, largest, sleep, signal, trackCompare, trackSwap);
     }
 }

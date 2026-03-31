@@ -1,4 +1,4 @@
-window.insertionSort = async function(bars, arr, sleep, signal) {
+window.insertionSort = async function(bars, arr, sleep, signal, trackCompare, trackSwap) {
     const n = arr.length;
     bars[0].className = 'bar sorted';
     
@@ -7,11 +7,15 @@ window.insertionSort = async function(bars, arr, sleep, signal) {
         let j = i - 1;
         
         bars[i].classList.add('compare');
+        if (trackCompare) trackCompare();
         await sleep(signal);
         
         while (j >= 0 && arr[j] > key) {
+            if (trackCompare) trackCompare();
             bars[j].classList.add('swap');
             bars[j + 1].classList.add('swap');
+            
+            if (trackSwap) trackSwap();
             
             // Shift in array and visually
             arr[j + 1] = arr[j];
@@ -25,6 +29,7 @@ window.insertionSort = async function(bars, arr, sleep, signal) {
         
         arr[j + 1] = key;
         bars[j + 1].style.height = `${key}%`;
+        if (trackSwap) trackSwap();
         bars[j + 1].className = 'bar sorted';
         await sleep(signal);
         

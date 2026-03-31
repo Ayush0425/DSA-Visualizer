@@ -1,9 +1,10 @@
-window.bubbleSort = async function(bars, arr, sleep, signal) {
+window.bubbleSort = async function(bars, arr, sleep, signal, trackCompare, trackSwap) {
     const n = arr.length;
     for (let i = 0; i < n - 1; i++) {
         for (let j = 0; j < n - i - 1; j++) {
             bars[j].classList.add('compare');
             bars[j+1].classList.add('compare');
+            if (trackCompare) trackCompare();
             await sleep(signal);
             
             if (arr[j] > arr[j+1]) {
@@ -11,6 +12,7 @@ window.bubbleSort = async function(bars, arr, sleep, signal) {
                 bars[j+1].classList.remove('compare');
                 bars[j].classList.add('swap');
                 bars[j+1].classList.add('swap');
+                if (trackSwap) trackSwap();
                 
                 // Swap in array
                 let temp = arr[j];

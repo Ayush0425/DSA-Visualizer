@@ -8,6 +8,9 @@ const speedSelect = document.getElementById('speed-slider');
 const algorithmSelect = document.getElementById('algorithm-select');
 const customArrayInput = document.getElementById('custom-array-input');
 const setCustomBtn = document.getElementById('set-custom-btn');
+const resetBtn = document.getElementById('reset-btn');
+const countCompareVal = document.getElementById('count-compare');
+const countSwapVal = document.getElementById('count-swap');
 
 // Info Panel elements
 const infoPanel = {
@@ -60,12 +63,28 @@ const ALGO_INFO = {
         average: "O(n log n)",
         worst: "O(n log n)",
         space: "O(1)"
+    },
+    shell: {
+        title: "Shell Sort",
+        best: "O(n log n)",
+        average: "O(n^{1.25})",
+        worst: "O(n²)",
+        space: "O(1)"
+    },
+    cocktail: {
+        title: "Cocktail Shaker Sort",
+        best: "O(n)",
+        average: "O(n²)",
+        worst: "O(n²)",
+        space: "O(1)"
     }
 };
 
 let array = [];
+let originalArray = []; // To support reset functionality
 let isSorting = false;
 let abortController = null;
+let stats = { comparisons: 0, swaps: 0 };
 
 function updateAlgorithmInfo() {
     const algo = ALGO_INFO[algorithmSelect.value];
@@ -74,6 +93,28 @@ function updateAlgorithmInfo() {
     infoPanel.average.textContent = algo.average;
     infoPanel.worst.textContent = algo.worst;
     infoPanel.space.textContent = algo.space;
+    resetStats();
+}
+
+function resetStats() {
+    stats.comparisons = 0;
+    stats.swaps = 0;
+    updateStatsDisplay();
+}
+
+function updateStatsDisplay() {
+    countCompareVal.textContent = stats.comparisons;
+    countSwapVal.textContent = stats.swaps;
+}
+
+function trackCompare() {
+    stats.comparisons++;
+    updateStatsDisplay();
+}
+
+function trackSwap() {
+    stats.swaps++;
+    updateStatsDisplay();
 }
 
 function generateArray(customValues = null) {
@@ -117,6 +158,8 @@ function generateArray(customValues = null) {
         
         visualizationContainer.appendChild(bar);
     }
+    originalArray = [...array]; // Store the original state for reset
+    resetStats();
 }
 
 function setUIState(sorting) {
@@ -167,17 +210,21 @@ async function startSorting() {
     
     try {
         if (algoName === 'bubble' && window.bubbleSort) {
-            await window.bubbleSort(bars, array, sleep, abortController.signal);
+            await window.bubbleSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'selection' && window.selectionSort) {
-            await window.selectionSort(bars, array, sleep, abortController.signal);
+            await window.selectionSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'insertion' && window.insertionSort) {
-            await window.insertionSort(bars, array, sleep, abortController.signal);
+            await window.insertionSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'merge' && window.mergeSort) {
-            await window.mergeSort(bars, array, sleep, abortController.signal);
+            await window.mergeSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'quick' && window.quickSort) {
-            await window.quickSort(bars, array, sleep, abortController.signal);
+            await window.quickSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'heap' && window.heapSort) {
-            await window.heapSort(bars, array, sleep, abortController.signal);
+            await window.heapSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
+        } else if (algoName === 'shell' && window.shellSort) {
+            await window.shellSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
+        } else if (algoName === 'cocktail' && window.cocktailSort) {
+            await window.cocktailSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         }
         
         // Final sorted visual flourish
@@ -237,6 +284,33 @@ stopBtn.addEventListener('click', () => {
         abortController.abort();
     }
 });
+
+resetBtn.addEventListener('click', () => {
+    if (isSorting) return;
+    if (abortController) abortController.abort();
+    array = [...originalArray];
+    generateArrayFromValues(array);
+});
+
+function generateArrayFromValues(values) {
+    visualizationContainer.innerHTML = '';
+    const size = values.length;
+    let maxValue = Math.max(...values, 100);
+    
+    for (let i = 0; i < size; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${values[i]}%`;
+        
+        const availableWidth = visualizationContainer.clientWidth - (size * 3) - 40;
+        let calculatedWidth = Math.max(2, Math.floor(availableWidth / size));
+        if (calculatedWidth > 30) calculatedWidth = 30;
+        
+        bar.style.width = `${calculatedWidth}px`;
+        visualizationContainer.appendChild(bar);
+    }
+    resetStats();
+}
 
 // On resize, we might want to regenerate to fix bar width anomalies
 window.addEventListener('resize', () => {

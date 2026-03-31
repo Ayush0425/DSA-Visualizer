@@ -1,0 +1,138 @@
+/* Additions on top of style.css specifically for the graph UI */
+
+.graph-main {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2rem;
+}
+
+#grid-container {
+    display: grid;
+    /* Grid-template will be set dynamically in JS based on array row/col count */
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    /* Try to make it large enough to fit most desktop screens */
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+}
+
+.node {
+    width: 25px;
+    height: 25px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background-color: transparent;
+    transition: background-color 0.1s;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.node.wall {
+    background-color: var(--text-secondary);
+    border: 1px solid var(--text-secondary);
+    animation: wallAnimation 0.3s ease-in-out forwards;
+}
+
+.node.start {
+    background-image: radial-gradient(circle, #34d399, #10b981);
+    border-radius: 50%;
+    transform: scale(0.9);
+}
+
+.node.target {
+    background-image: radial-gradient(circle, #f43f5e, #e11d48);
+    border-radius: 50%;
+    transform: scale(0.9);
+}
+
+.node.visited {
+    animation: visitedAnimation 1.5s ease-out forwards;
+}
+
+.node.path {
+    animation: pathAnimation 0.5s ease-out forwards;
+}
+
+/* Legend Styles */
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.node-legend {
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 4px;
+}
+
+.node-legend.start { background-image: radial-gradient(circle, #34d399, #10b981); border-radius: 50%; transform: scale(0.9); }
+.node-legend.target { background-image: radial-gradient(circle, #f43f5e, #e11d48); border-radius: 50%; transform: scale(0.9); }
+.node-legend.wall { background-color: var(--text-secondary); }
+.node-legend.visited { background-color: rgba(99, 102, 241, 0.8); }
+.node-legend.path { background-color: #fbbf24; }
+
+#algo-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: 0.5rem;
+}
+
+/* Animations */
+@keyframes wallAnimation {
+    0% { transform: scale(0.3); background-color: rgba(148, 163, 184, 0.5); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1.0); background-color: var(--text-secondary); }
+}
+
+@keyframes visitedAnimation {
+    0% {
+        transform: scale(0.3);
+        background-color: rgba(59, 130, 246, 0.8);
+        border-radius: 100%;
+    }
+    50% {
+        transform: scale(1.1);
+        background-color: rgba(99, 102, 241, 0.6);
+    }
+    100% {
+        transform: scale(1.0);
+        background-color: rgba(99, 102, 241, 0.3);  /* lighter purplish blue */
+        border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+}
+
+@keyframes pathAnimation {
+    0% {
+        transform: scale(0.6);
+        background-color: var(--bar-compare);
+        border-radius: 50%;
+    }
+    50% {
+        transform: scale(1.1);
+        background-color: var(--bar-swap);
+    }
+    100% {
+        transform: scale(1.0);
+        background-color: var(--bar-swap); /* Yellow base for path */
+        border: 1px solid var(--bar-swap);
+    }
+}
