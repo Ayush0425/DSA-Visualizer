@@ -70,13 +70,6 @@ const ALGO_INFO = {
         average: "O(n^{1.25})",
         worst: "O(n²)",
         space: "O(1)"
-    },
-    cocktail: {
-        title: "Cocktail Shaker Sort",
-        best: "O(n)",
-        average: "O(n²)",
-        worst: "O(n²)",
-        space: "O(1)"
     }
 };
 
@@ -223,8 +216,6 @@ async function startSorting() {
             await window.heapSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         } else if (algoName === 'shell' && window.shellSort) {
             await window.shellSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
-        } else if (algoName === 'cocktail' && window.cocktailSort) {
-            await window.cocktailSort(bars, array, sleep, abortController.signal, trackCompare, trackSwap);
         }
         
         // Final sorted visual flourish
